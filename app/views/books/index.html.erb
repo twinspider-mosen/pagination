@@ -1,0 +1,69 @@
+<div class="container">
+  <%# <p style="color: green"><%= notice %>
+<div class=" d-flex flex-row justify-content-between align-items-center">
+  <h1>Books</h1>
+<div class= "d-flex flex-row"><% if user_signed_in? %>
+<div class= "card d-flex flex-row p-2">
+  <strong>User: </strong>
+<%= current_user.email%>
+</div>
+<%= link_to "Logout" , destroy_user_session_path, data: {turbo_method: "delete"}, class: 'btn btn-danger ml-2' %>
+<%else%>
+<%= link_to "Login" , new_user_session_path , class: 'btn btn-light'%>
+<%= link_to "Register" , new_user_registration_path , class: 'btn btn-dark ml-2'%>
+
+<%end%>
+
+</div>
+</div>
+
+
+<table border= "1">
+        <tr>
+            <th class="p-2">ID</th>
+            <th class="p-2">Title</th>
+            <th class="p-2">Description</th>
+            <th class="p-2 text-center">Actions</th>
+        </tr>
+<div id="books">
+  <% @books.each do |book| %>
+    <%# <%= render book %> 
+
+        <tr>
+            <td class="p-2"><%=book.id%></td>
+            <td class="p-2"><%=book.title%></td>
+            <td class="p-2"><%=book.body%></td>
+            <td class="p-2">
+                <table class="nested-table">
+                    <tr class="p-2">
+                        <td >
+      <%= link_to "Show", book , class: 'btn btn-info'%>
+    </td>  <% if user_signed_in? %>
+                        <td >   <%= link_to "Edit", edit_book_path(book), class: 'btn btn-warning' %></td>
+                         <%end%>
+                      <% if user_signed_in? && current_user.admin?%>
+                        <td>   <%= button_to "Destroy ", book, method: :delete , class: 'btn btn-danger'%></td>
+                      <%end%>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+
+  <% end %>
+      </table>
+      <div class="d-flex flex-row justify-content-between align-items-start">
+<div>
+  <% if user_signed_in?%>
+<%= link_to "New book", new_book_path ,class:'btn btn-primary my-2' %>
+   <%end%>
+</div>
+   <div class="my-2">   <%== pagy_bootstrap_nav(@pagy) %>
+</div>
+
+      </div>
+
+
+</div>
+
+</div>
